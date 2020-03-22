@@ -1,2 +1,3 @@
 # picorona
-A raspberry pi-based Coronavirus outbreak display
+
+A raspberry pi-based Coronavirus outbreak display. Only testing at the moment.
