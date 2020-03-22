@@ -1,0 +1,17 @@
+https://www.gov.scot/coronavirus-covid-19/
+
+<div id="overview">
+  <ul>
+   <li>8263 tests were confirmed negative
+   <li>416 tests were positive
+   <li>10 patients who tested positive for coronavirus (COVID-19) have died
+
+  <table>
+    <thead>
+      <tr>
+        <th>Health board
+        <th>Positive cases
+    <tbody>
+      <tr>
+        <td>Lothian</td>
+        <td>46</td>
