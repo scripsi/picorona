@@ -25,7 +25,7 @@ inky_display.set_border(inky_display.BLACK)
 
 new_cases = 10
 days_lockdown = 10
-day_text = "Wed"
+day_text = "Wednesday"
 date_text = str(25)
 month_text = "Mar"
 
@@ -40,17 +40,17 @@ for virus in range(1, new_cases, 1):
     y = random.randint(0, 103)
 
 # font = ImageFont.truetype(SourceSansPro, 48)
-font = ImageFont.truetype(FredokaOne, 22)
+font = ImageFont.truetype(FredokaOne, 24)
 days_lockdown_text = str(days_lockdown)
-draw.text((10,60), days_lockdown_text, inky_display.RED, font)
+draw.text((10,60), days_lockdown_text, inky_display.WHITE, font)
 
 dw, dh = font.getsize(day_text)
 tw, th = font.getsize(date_text)
 mw, mh = font.getsize(month_text)
 
 draw.text((5,2), day_text, inky_display.WHITE, font)
-draw.text((5+tw,2), date_text, inky_display.RED, font)
-draw.text((5+tw+mw,2), month_text, inky_display.WHITE, font)
+draw.text((5+dw,2), date_text, inky_display.RED, font)
+draw.text((5+dw+tw,2), month_text, inky_display.WHITE, font)
 
 # qmark = "?"
 # qw, qh = font.getsize(qmark)
