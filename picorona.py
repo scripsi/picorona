@@ -8,6 +8,7 @@
 from PIL import Image, ImageFont, ImageDraw
 from inky import InkyPHAT
 from font_source_sans_pro import SourceSansPro
+from font_fredoka_one import FredokaOne
 from datetime import datetime, timedelta
 import random
 
@@ -23,6 +24,10 @@ inky_display.set_border(inky_display.BLACK)
 # inky_display.set_rotation(180)
 
 new_cases = 10
+days_lockdown = 10
+day_text = "Wed"
+date_text = str(25)
+month_text = "Mar"
 
 # img = Image.new(mode = "P", size = (inky_display.WIDTH,inky_display.HEIGHT), color = inky_display.WHITE))
 img = Image.open("/home/pi/picorona/background.png")
@@ -34,7 +39,18 @@ for virus in range(1, new_cases, 1):
     x = random.randint(0, 211)
     y = random.randint(0, 103)
 
-font = ImageFont.truetype(SourceSansPro, 48)
+# font = ImageFont.truetype(SourceSansPro, 48)
+font = ImageFont.truetype(FredokaOne, 22)
+days_lockdown_text = str(days_lockdown)
+draw.text((10,50), days_lockdown_text, inky_display.RED, font)
+
+dw, dh = font.getsize(day_text)
+tw, th = font.getsize(date_text)
+mw, mh = font.getsize(month_text)
+
+draw.text((5,25), day_text, inky_display.WHITE, font)
+draw.text((5+tw,25), date_text, inky_display.RED, font)
+draw.text((5+tw+mw,25), month_text, inky_display.WHITE, font)
 
 # qmark = "?"
 # qw, qh = font.getsize(qmark)
