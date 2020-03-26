@@ -29,14 +29,12 @@ now_time = datetime.now()
 time_since_lockdown = now_time - lockdown_time
 days_on_lockdown = time_since_lockdown.days
 
-# 
 new_cases = 10
 day_text = now_time.strftime("%A")
 date_text = now_time.strftime("%d/%m")
 
 # 152 x 74
 
-# img = Image.new(mode = "P", size = (inky_display.WIDTH,inky_display.HEIGHT), color = inky_display.WHITE))
 img = Image.open("/home/pi/picorona/background.png")
 draw = ImageDraw.Draw(img)
 virus_bg_source = img.copy()
@@ -59,37 +57,11 @@ draw.text((10,60), days_on_lockdown_text, inky_display.WHITE, font)
 dw, dh = font.getsize(day_text)
 tw, th = font.getsize(date_text)
 
-draw.text((5,1), day_text, inky_display.WHITE, font)
-draw.text((10+dw,1), date_text, inky_display.WHITE, font)
+draw.text((5,0), day_text, inky_display.WHITE, font)
+draw.text((10+dw,0), date_text, inky_display.WHITE, font)
 
 
-# qmark = "?"
-# qw, qh = font.getsize(qmark)
-
-# for q in range(1, 200, 1):
-#     qx = random.randint(0, inky_display.WIDTH) - qw
-#     qy = random.randint(0, inky_display.HEIGHT) - qh
-#     draw.text((qx,qy), "?", random.randint(0, 2), font)
-
-# draw.ellipse([81,27,131,77], inky_display.BLACK)
-
-#number_text = str(days_to_brexit1)
-#w, h = font.getsize(number_text)
-#rx = (inky_display.WIDTH / 2) - (w / 2) - 3
-#ry = (inky_display.HEIGHT / 2) - (h / 2) - 3
-#rxx = (inky_display.WIDTH / 2) + (w / 2) + 3
-#ryy = (inky_display.HEIGHT / 2) + (h / 2) + 3
-#draw.rectangle((rx,ry,rxx,ryy), inky_display.BLACK)
-#x = (inky_display.WIDTH / 2) - (w / 2)
-#y = (inky_display.HEIGHT / 2) - (h / 2) - 7
-# first_text = str(days_to_brexit1)
-# second_text = ' or ' + str(days_to_brexit2)
-# fw, fh = font.getsize(first_text)
-# draw.text((x,y), first_text, inky_display.WHITE, font)
-# draw.text((x+fw,y), second_text, inky_display.RED, font)
-#draw.text((x,y), number_text, inky_display.WHITE, font)
-
-# Display the logo image
+# Display the finished image
 
 inky_display.set_image(img.rotate(180))
 inky_display.show()
