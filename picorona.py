@@ -23,11 +23,16 @@ inky_display = InkyPHAT("red")
 inky_display.set_border(inky_display.BLACK)
 # inky_display.set_rotation(180)
 
+# Calculate days on lockdown
+lockdown_time = datetime(2020, 03, 16, 0, 0, 0, 0)
+now_time = datetime.now()
+time_since_lockdown = now_time - lockdown_time
+days_on_lockdown = time_since_lockdown.days
+
+# 
 new_cases = 10
-days_lockdown = 9
-day_text = "Thursday"
-date_text = str(26)
-month_text = "Mar"
+day_text = now_time.strftime("%A")
+date_text = now_time.strftime("%d/%m")
 
 # 152 x 74
 
@@ -42,22 +47,21 @@ virus_img = Image.open("/home/pi/picorona/coronavirus.png")
 for virus in range(1, new_cases, 1):
     x = random.randint(0, 151)
     y = random.randint(0, 73)
-    virus_bg.paste(virus_img,(x,y))
+    virus_bg.paste(virus_img,(x-10,y-10))
 
 img.paste(virus_bg,(inky_display.WIDTH-152,inky_display.HEIGHT-74))
 
 # font = ImageFont.truetype(SourceSansPro, 48)
 font = ImageFont.truetype(FredokaOne, 24)
-days_lockdown_text = str(days_lockdown)
-draw.text((10,60), days_lockdown_text, inky_display.WHITE, font)
+days_on_lockdown_text = str(days_on_lockdown)
+draw.text((10,60), days_on_lockdown_text, inky_display.WHITE, font)
 
 dw, dh = font.getsize(day_text)
 tw, th = font.getsize(date_text)
-mw, mh = font.getsize(month_text)
 
 draw.text((5,1), day_text, inky_display.WHITE, font)
-draw.text((5+dw,1), date_text, inky_display.RED, font)
-draw.text((5+dw+tw,1), month_text, inky_display.WHITE, font)
+draw.text((10+dw,1), date_text, inky_display.WHITE, font)
+
 
 # qmark = "?"
 # qw, qh = font.getsize(qmark)
