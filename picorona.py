@@ -24,7 +24,7 @@ inky_display.set_border(inky_display.BLACK)
 # inky_display.set_rotation(180)
 
 # Calculate days on lockdown
-lockdown_time = datetime(2020, 03, 16, 0, 0, 0, 0)
+lockdown_time = datetime(2020,3,16)
 now_time = datetime.now()
 time_since_lockdown = now_time - lockdown_time
 days_on_lockdown = time_since_lockdown.days
