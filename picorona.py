@@ -24,9 +24,9 @@ inky_display.set_border(inky_display.BLACK)
 # inky_display.set_rotation(180)
 
 new_cases = 10
-days_lockdown = 10
-day_text = "Wednesday"
-date_text = str(25)
+days_lockdown = 9
+day_text = "Thursday"
+date_text = str(26)
 month_text = "Mar"
 
 # 152 x 74
@@ -34,15 +34,17 @@ month_text = "Mar"
 # img = Image.new(mode = "P", size = (inky_display.WIDTH,inky_display.HEIGHT), color = inky_display.WHITE))
 img = Image.open("/home/pi/picorona/background.png")
 draw = ImageDraw.Draw(img)
-virus_bg = img.copy()
-virus_bg_crop = virus_bg.crop((inky_display.WIDTH-152,inky_display.HEIGHT-74,inky_display.WIDTH,inky_display.HEIGHT))
-virus_draw = ImageDraw.Draw(virus_bg_crop)
+virus_bg_source = img.copy()
+virus_bg = virus_bg_source.crop((inky_display.WIDTH-152,inky_display.HEIGHT-74,inky_display.WIDTH,inky_display.HEIGHT))
 virus_img = Image.open("/home/pi/picorona/coronavirus.png")
 
 # Add viruses to image
 for virus in range(1, new_cases, 1):
-    x = random.randint(0, 211)
-    y = random.randint(0, 103)
+    x = random.randint(0, 151)
+    y = random.randint(0, 73)
+    virus_bg.paste(virus_img,(x,y))
+
+img.paste(virus_bg,(inky_display.WIDTH-152,inky_display.HEIGHT-74))
 
 # font = ImageFont.truetype(SourceSansPro, 48)
 font = ImageFont.truetype(FredokaOne, 24)
