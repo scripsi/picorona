@@ -29,9 +29,14 @@ day_text = "Wednesday"
 date_text = str(25)
 month_text = "Mar"
 
+# 152 x 74
+
 # img = Image.new(mode = "P", size = (inky_display.WIDTH,inky_display.HEIGHT), color = inky_display.WHITE))
 img = Image.open("/home/pi/picorona/background.png")
 draw = ImageDraw.Draw(img)
+virus_bg = img.copy()
+virus_bg_crop = virus_bg.crop((inky_display.WIDTH-152,inky_display.HEIGHT-74,inky_display.WIDTH,inky_display.HEIGHT))
+virus_draw = ImageDraw.Draw(virus_bg_crop)
 virus_img = Image.open("/home/pi/picorona/coronavirus.png")
 
 # Add viruses to image
@@ -48,9 +53,9 @@ dw, dh = font.getsize(day_text)
 tw, th = font.getsize(date_text)
 mw, mh = font.getsize(month_text)
 
-draw.text((5,2), day_text, inky_display.WHITE, font)
-draw.text((5+dw,2), date_text, inky_display.RED, font)
-draw.text((5+dw+tw,2), month_text, inky_display.WHITE, font)
+draw.text((5,1), day_text, inky_display.WHITE, font)
+draw.text((5+dw,1), date_text, inky_display.RED, font)
+draw.text((5+dw+tw,1), month_text, inky_display.WHITE, font)
 
 # qmark = "?"
 # qw, qh = font.getsize(qmark)
