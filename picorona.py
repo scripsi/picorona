@@ -73,6 +73,9 @@ lothian_series.to_csv("lothian.csv", header=False)
 last_days = lothian_series.tail(2)
 new_cases = last_days[1] - last_days[0]
 
+print(cases_number,"cases of Coronavirus in Lothian up to", cases_date.strftime("%D, %d %B %Y"))
+print(new_cases,"new cases since the previous day")
+
 # Phew! we've got all the info we need - now to show it on the display
 
 # Set up the display image
