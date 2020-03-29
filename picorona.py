@@ -59,8 +59,10 @@ cases_date = datetime.strptime(cases_date_text, "Scottish test numbers: %d %B %Y
 region_table = soup.find("table")
 region_rows = region_table.find_all("tr")
 for region_row in region_rows:
-    if region_row.contents[1].string == "Lothian":
+    if region_row.find_all("Lothian"):
+        print("Found Lothian!")
         cases_number = int(region_row.contents[3].string)
+        print("cases number: ")
 
 # Open the time series data from a csv file
 lothian_series = pd.read_csv("lothian.csv", header=None, index_col=0, parse_dates=True, squeeze=True)
