@@ -57,14 +57,8 @@ soup = BeautifulSoup(xhtml, "html.parser")
 cases_date_text = soup.find(string=re.compile("Scottish test numbers:"))
 cases_date = datetime.strptime(cases_date_text, "Scottish test numbers: %d %B %Y")
 region_table = soup.find("table")
-cases_data = pd.read_html(str(region_table))
-print(cases_data)
-# region_rows = region_table.find_all("tr")
-# for region_row in region_rows:
-#    if region_row.find_all("Lothian"):
-#        print("Found Lothian!")
-#        cases_number = int(region_row.contents[3].string)
-#        print("cases number: ")
+cases_data = pd.read_html(str(region_table), index_col=0)
+cases_number = int(cases_data[0].at["Lothian",1])
 
 # Open the time series data from a csv file
 lothian_series = pd.read_csv("lothian.csv", header=None, index_col=0, parse_dates=True, squeeze=True)
