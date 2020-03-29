@@ -61,11 +61,11 @@ cases_data = pd.read_html(str(region_table), index_col=0)
 cases_number = int(cases_data[0].at["Lothian",1])
 
 # Open the time series data from a csv file
-lothian_series = pd.read_csv("lothian.csv", header=None, index_col=0, parse_dates=True, squeeze=True)
+lothian_series = pd.read_csv("/home/pi/picorona/lothian.csv", header=None, index_col=0, parse_dates=True, squeeze=True)
 
 # Update the time series data and save it back to the csv file
 lothian_series[cases_date] = cases_number
-lothian_series.to_csv("lothian.csv", header=False)
+lothian_series.to_csv("/home/pi/picorona/lothian.csv", header=False)
 
 # Calculate the number of new cases from the difference between the last two days
 last_days = lothian_series.tail(2)
@@ -77,12 +77,12 @@ print(new_cases,"new cases since the previous day")
 # Phew! we've got all the info we need - now to show it on the display
 
 # Set up the display image
-img = Image.open("background.png")
+img = Image.open("/home/pi/picorona/background.png")
 draw = ImageDraw.Draw(img)
 virus_bg_source = img.copy()
 virus_bg = virus_bg_source.crop((inky_display.WIDTH-153,inky_display.HEIGHT-74,inky_display.WIDTH,inky_display.HEIGHT))
-virus_img = Image.open("coronavirus.png")
-virus_mask = Image.open("coronavirus-mask.png")
+virus_img = Image.open("/home/pi/picorona/coronavirus.png")
+virus_mask = Image.open("/home/pi/picorona/coronavirus-mask.png")
 
 # Add viruses to the image
 for virus in range(new_cases):
