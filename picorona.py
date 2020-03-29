@@ -79,17 +79,18 @@ print(new_cases,"new cases since the previous day")
 # Phew! we've got all the info we need - now to show it on the display
 
 # Set up the display image
-img = Image.open("/home/pi/picorona/background.png")
+img = Image.open("background.png")
 draw = ImageDraw.Draw(img)
 virus_bg_source = img.copy()
 virus_bg = virus_bg_source.crop((inky_display.WIDTH-153,inky_display.HEIGHT-74,inky_display.WIDTH,inky_display.HEIGHT))
-virus_img = Image.open("/home/pi/picorona/coronavirus.png")
+virus_img = Image.open("coronavirus.png")
+virus_mask = Image.open("coronavirus-mask.png")
 
 # Add viruses to the image
-for virus in range(1, new_cases, 1):
+for virus in range(new_cases):
     x = random.randint(0, 152)
     y = random.randint(0, 73)
-    virus_bg.paste(virus_img,(x-10,y-10))
+    virus_bg.paste(virus_img,(x-10,y-10),virus_mask)
 
 img.paste(virus_bg,(inky_display.WIDTH-153,inky_display.HEIGHT-74))
 
