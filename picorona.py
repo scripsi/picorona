@@ -121,10 +121,10 @@ if web_success:
             virus_bg.paste(virus_img,(x-10,y-10),virus_mask)
     else:
         vdraw = ImageDraw.Draw(virus_bg)
-        vdraw.text((5,30), "Parse Err", inky_display.RED, font)
+        vdraw.text((5,25), "Parse Error", inky_display.RED, font)
 else:
     vdraw = ImageDraw.Draw(virus_bg)
-    vdraw.text((5,30), "Netwk Err", inky_display.RED, font)
+    vdraw.text((5,25), "Netwk Error", inky_display.RED, font)
 
 img.paste(virus_bg,(inky_display.WIDTH-153,inky_display.HEIGHT-74))
 
