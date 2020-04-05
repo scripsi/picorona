@@ -4,7 +4,7 @@
 # adding the following lines:
 #
 #   0 0 * * * /usr/bin/python3 /home/pi/picorona/picorona.py >/dev/null 2>&1
-#   0 18 * * * /usr/bin/python3 /home/pi/picorona/picorona.py >/dev/null 2>&1
+#   0 15 * * * /usr/bin/python3 /home/pi/picorona/picorona.py >/dev/null 2>&1
 
 # import lots of necessary stuff
 from PIL import Image, ImageFont, ImageDraw
