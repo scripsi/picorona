@@ -82,11 +82,11 @@ else:
                 else:
                     parse_success = True
                     # Open the time series data from a csv file
-                    lothian_series = pd.read_csv("lothian.csv", header=None, index_col=0, parse_dates=True, squeeze=True)
+                    lothian_series = pd.read_csv("/home/pi/picorona/lothian.csv", header=None, index_col=0, parse_dates=True, squeeze=True)
 
                     # Update the time series data and save it back to the csv file
                     lothian_series[cases_date] = cases_number
-                    lothian_series.to_csv("lothian.csv", header=False)
+                    lothian_series.to_csv("/home/pi/picorona/lothian.csv", header=False)
 
                     # Calculate the number of new cases from the difference between the last two days
                     last_days = lothian_series.tail(2)
