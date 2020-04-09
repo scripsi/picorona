@@ -50,7 +50,8 @@ date_text = datetime.now().strftime("%d/%m")
 # get web page content
 web_success = False
 parse_success = False
-req = urllib.request.Request(url="https://www.gov.scot/coronavirus-covid-19/")
+req = urllib.request.Request(url="https://www.gov.scot/publications/coronavirus-covid-19-tests-and-cases-in-scotland/")
+# req = urllib.request.Request(url="https://www.gov.scot/coronavirus-covid-19/")
 # req = urllib.request.Request(url="https://www.gov.scot/")
 try:
     f = urllib.request.urlopen(req)
@@ -63,19 +64,20 @@ else:
     # parse the web page to find the data
     xhtml = f.read().decode("utf-8")
     soup = BeautifulSoup(xhtml, "html.parser")
-    cases_date_text = soup.find(string=re.compile("Scottish test numbers:"))
+    cases_date_text = soup.find(string=re.compile("Scottish COVID-19 test numbers:"))
     if cases_date_text:
         try:
-            cases_date = datetime.strptime(cases_date_text, "Scottish test numbers: %d %B %Y")
+            cases_date = datetime.strptime(cases_date_text, "Scottish COVID-19 test numbers: %d %B %Y")
         except:
             parse_success = False
             print("Error! Parsing of cases date failed.")
         else:
             region_table = soup.find("table")
             if region_table:
-                cases_data = pd.read_html(str(region_table), index_col=0)
+                data_tables = pd.read_html(str(region_table), index_col=0)
+                cases_data = data_tables[0]
                 try:
-                    cases_number = int(cases_data[0].at["Lothian",1])
+                    cases_number = int(cases_data.at["Lothian","Total confirmed cases to date"])
                 except:
                     parse_success = False
                     print("Error! Parsing of Lothian cases number failed.")
