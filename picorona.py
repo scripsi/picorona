@@ -77,7 +77,7 @@ else:
                 data_tables = pd.read_html(str(region_table), index_col=0)
                 cases_data = data_tables[0]
                 try:
-                    cases_number = int(cases_data.at["Lothian","Total confirmed cases to date"])
+                    cases_number = int(cases_data.at["Lothian",1])
                 except:
                     parse_success = False
                     print("Error! Parsing of Lothian cases number failed.")
