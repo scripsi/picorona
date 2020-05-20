@@ -64,7 +64,7 @@ else:
     # parse the web page to find the data
     xhtml = f.read().decode("utf-8")
     soup = BeautifulSoup(xhtml, "html.parser")
-    cases_date_text = soup.find(string=re.compile("Scottish COVID-19 test numbers:"))
+    cases_date_text = soup.find(string=re.compile("Scottish numbers:"))
     if cases_date_text:
         try:
             cases_date = datetime.strptime(cases_date_text, "Scottish COVID-19 test numbers: %d %B %Y")
