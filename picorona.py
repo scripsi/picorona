@@ -67,7 +67,7 @@ else:
     cases_date_text = soup.find(string=re.compile("Scottish numbers:"))
     if cases_date_text:
         try:
-            cases_date = datetime.strptime(cases_date_text, "Scottish COVID-19 test numbers: %d %B %Y")
+            cases_date = datetime.strptime(cases_date_text, "Scottish numbers: %d %B %Y")
         except:
             parse_success = False
             print("Error! Parsing of cases date failed.")
