@@ -46,10 +46,6 @@ date_text = datetime.now().strftime("%d/%m")
 # The aim is to end up with a total number of cases in "cases_number" and
 # the date of that statistic in "cases_date"
 
-import sparql_dataframe
-import pandas as pd
-from datetime import datetime, timedelta
-
 # get web page content
 web_success = False
 
