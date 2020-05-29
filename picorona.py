@@ -11,7 +11,7 @@ from PIL import Image, ImageFont, ImageDraw
 from inky import InkyPHAT
 from font_fredoka_one import FredokaOne
 from datetime import datetime, timedelta
-import sparql_dataframe
+from SPARQLWrapper import SPARQLWrapper, CSV
 import re
 import random
 import pandas as pd
@@ -64,12 +64,19 @@ WHERE {
 }
 """
 
+sparql = SPARQLWrapper(sparql_endpoint)
+sparql.setQuery(sparql_query)
+sparql.setReturnFormat(CSV)
+
 try:
-    cases_data = sparql_dataframe.get(sparql_endpoint, sparql_query)
+    sparql_results = sparql.query().convert()
 except:
     web_success = False
     print("Error! API access failed - network or remote server failure.")  
 else:
+    _csv = pd.compat.StringIO(sparql_results.decode('utf-8'))
+    cases_data=pd.read_csv(_csv, sep=",")
+
     # rename data columns to something more useful
     cases_data.rename(
         columns={
