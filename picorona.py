@@ -11,11 +11,10 @@ from PIL import Image, ImageFont, ImageDraw
 from inky import InkyPHAT
 from font_fredoka_one import FredokaOne
 from datetime import datetime, timedelta
-import urllib.request
+import sparql_dataframe
 import re
 import random
 import pandas as pd
-from bs4 import BeautifulSoup
 
 print("""Inky pHAT: picorona
 
@@ -38,7 +37,7 @@ day_text = datetime.now().strftime("%A")
 date_text = datetime.now().strftime("%d/%m")
 
 
-# Use BeautifulSoup to scrape the data we need from the appropriate web page.
+# Use the rather nice statistics.gov.scot API to get the data we need.
 # 
 # We're looking at the Scottish NHS Coronavirus figures to track the Lothian
 # NHS region. If you want to look at other statistics you'll have to change
@@ -47,61 +46,67 @@ date_text = datetime.now().strftime("%d/%m")
 # The aim is to end up with a total number of cases in "cases_number" and
 # the date of that statistic in "cases_date"
 
+import sparql_dataframe
+import pandas as pd
+from datetime import datetime, timedelta
+
 # get web page content
 web_success = False
-parse_success = False
-req = urllib.request.Request(url="https://www.gov.scot/publications/coronavirus-covid-19-tests-and-cases-in-scotland/")
-# req = urllib.request.Request(url="https://www.gov.scot/coronavirus-covid-19/")
-# req = urllib.request.Request(url="https://www.gov.scot/")
+
+sparql_endpoint = "https://statistics.gov.scot/sparql"
+sparql_query = """
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?periodname ?value
+WHERE {
+	?obs <http://purl.org/linked-data/cube#dataSet> <http://statistics.gov.scot/data/coronavirus-covid-19-management-information> .
+	?obs <http://purl.org/linked-data/sdmx/2009/dimension#refArea> <http://statistics.gov.scot/id/statistical-geography/S08000024> .
+    ?obs <http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure> <http://statistics.gov.scot/def/concept/measure-units/testing-cumulative-people-tested-for-covid-19-positive> .
+	?obs <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> ?perioduri .
+	?obs <http://statistics.gov.scot/def/measure-properties/count> ?value .
+	?perioduri rdfs:label ?periodname .
+}
+"""
+
 try:
-    f = urllib.request.urlopen(req)
-except urllib.error.URLError as e:
+    cases_data = sparql_dataframe.get(sparql_endpoint, sparql_query)
+except:
     web_success = False
-    print("Error! Web page access failed - network or remote server failure.")
+    print("Error! API access failed - network or remote server failure.")  
 else:
-    web_success = True
-    
-    # parse the web page to find the data
-    xhtml = f.read().decode("utf-8")
-    soup = BeautifulSoup(xhtml, "html.parser")
-    cases_date_text = soup.find(string=re.compile("Scottish numbers:"))
-    if cases_date_text:
-        try:
-            cases_date = datetime.strptime(cases_date_text, "Scottish numbers: %d %B %Y")
-        except:
-            parse_success = False
-            print("Error! Parsing of cases date failed.")
-        else:
-            region_table = soup.find("table")
-            if region_table:
-                data_tables = pd.read_html(str(region_table), index_col=0)
-                cases_data = data_tables[0]
-                try:
-                    cases_number = int(cases_data.at["Lothian",1])
-                except:
-                    parse_success = False
-                    print("Error! Parsing of Lothian cases number failed.")
-                else:
-                    parse_success = True
-                    # Open the time series data from a csv file
-                    lothian_series = pd.read_csv("/home/pi/picorona/lothian.csv", header=None, index_col=0, parse_dates=True, squeeze=True)
+    # rename data columns to something more useful
+    cases_data.rename(
+        columns={
+            'periodname' : 'sample_day',
+            'value' : 'cumulative_count'
+        }, inplace=True
+    )
+    # recast date sample_day column to date format
+    cases_data.loc[:,'sample_day'] = pd.to_datetime(cases_data.sample_day)
+    # recast cumulative_count column safely to numeric format, replace the NaNs with zero and then recast to int
+    cases_data.cumulative_count = pd.to_numeric(cases_data.cumulative_count,errors='coerce')
+    cases_data.loc[:,'cumulative_count'].fillna(0, inplace=True)
+    cases_data.cumulative_count = cases_data.cumulative_count.astype('Int64')
 
-                    # Update the time series data and save it back to the csv file
-                    lothian_series[cases_date] = cases_number
-                    lothian_series.to_csv("/home/pi/picorona/lothian.csv", header=False)
+    # create a daily_count column, replace the NaNs with zero and then recast to int
+    cases_data['daily_count'] = cases_data.cumulative_count.diff()
+    cases_data.loc[:,'daily_count'].fillna(0, inplace=True)
+    cases_data.daily_count = cases_data.daily_count.astype('Int64')
 
-                    # Calculate the number of new cases from the difference between the last two days
-                    last_days = lothian_series.tail(2)
-                    new_cases = last_days[1] - last_days[0]
+    # create a rolling 7day mean
+    cases_data['d7_mean'] = cases_data.daily_count.rolling(window=7,min_periods=1).mean()
 
-                    print(cases_number,"cases of Coronavirus in Lothian up to", cases_date.strftime("%A, %d %B %Y"))
-                    print(new_cases,"new cases since the previous day")
-            else:
-                parse_success = False
-                print("Error! Parsing of cases table failed.")
-    else:
-        parse_success = False
-        print("Error! Parsing of cases date failed.")
+    # create a rolling 30day max
+    cases_data['d30_max'] = cases_data.daily_count.rolling(window=30,min_periods=1).max()
+    # print(cases_data.describe())
+    # print(cases_data)
+
+    cases_number = cases_data.at[cases_data.last_valid_index(),'cumulative_count']
+    new_cases = cases_data.at[cases_data.last_valid_index(),'daily_count']
+    cases_date = cases_data.at[cases_data.last_valid_index(),'sample_day']
+    d30_max = cases_data.at[cases_data.last_valid_index(),'d30_max']
+    print(cases_number,"cases of Coronavirus in Lothian up to", cases_date.strftime("%A, %d %B %Y"))
+    print(new_cases,"new cases since the previous day")
 
 # Phew! we've got all the info we need - now to show it on the display
 
@@ -114,16 +119,12 @@ virus_bg = virus_bg_source.crop((inky_display.WIDTH-153,inky_display.HEIGHT-74,i
 virus_img = Image.open("/home/pi/picorona/coronavirus.png")
 virus_mask = Image.open("/home/pi/picorona/coronavirus-mask.png")
 
-if web_success:
-    if parse_success:
-        # Add viruses to the image
-        for virus in range(new_cases):
-            x = random.randint(0, 152)
-            y = random.randint(0, 73)
-            virus_bg.paste(virus_img,(x-10,y-10),virus_mask)
-    else:
-        vdraw = ImageDraw.Draw(virus_bg)
-        vdraw.text((5,25), "Parse Error", inky_display.RED, font)
+if web_success:  
+    # Add viruses to the image
+    for virus in range(new_cases):
+        x = random.randint(0, 152)
+        y = random.randint(0, 73)
+        virus_bg.paste(virus_img,(x-10,y-10),virus_mask)
 else:
     vdraw = ImageDraw.Draw(virus_bg)
     vdraw.text((5,25), "Netwk Error", inky_display.RED, font)
