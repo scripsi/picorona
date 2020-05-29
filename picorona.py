@@ -74,6 +74,8 @@ except:
     web_success = False
     print("Error! API access failed - network or remote server failure.")  
 else:
+    web_success = True
+
     _csv = pd.compat.StringIO(sparql_results.decode('utf-8'))
     cases_data=pd.read_csv(_csv, sep=",")
 
