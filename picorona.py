@@ -121,7 +121,7 @@ draw = ImageDraw.Draw(img)
 font = ImageFont.truetype(FredokaOne, 24)
 virus_bg_source = img.copy()
 virus_bg = virus_bg_source.crop((inky_display.WIDTH-153,inky_display.HEIGHT-74,inky_display.WIDTH,inky_display.HEIGHT))
-vdraw = ImageDraw.draw(virus_bg)
+vdraw = ImageDraw.Draw(virus_bg)
 virus_img = Image.open("/home/pi/picorona/coronavirus.png")
 virus_mask = Image.open("/home/pi/picorona/coronavirus-mask.png")
 
