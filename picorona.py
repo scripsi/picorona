@@ -121,6 +121,7 @@ draw = ImageDraw.Draw(img)
 font = ImageFont.truetype(FredokaOne, 24)
 virus_bg_source = img.copy()
 virus_bg = virus_bg_source.crop((inky_display.WIDTH-153,inky_display.HEIGHT-74,inky_display.WIDTH,inky_display.HEIGHT))
+vdraw = ImageDraw(virus_bg)
 virus_img = Image.open("/home/pi/picorona/coronavirus.png")
 virus_mask = Image.open("/home/pi/picorona/coronavirus-mask.png")
 
@@ -130,8 +131,18 @@ if web_success:
         x = random.randint(0, 152)
         y = random.randint(0, 73)
         virus_bg.paste(virus_img,(x-10,y-10),virus_mask)
+    # Draw trend line
+    if d30_max < 10:
+        v_max = 10
+    else:
+        v_max = d30_max
+    for v_day in 0..29:
+        x1 = 1 + (v_day * 5)
+        y1 = 1 + (cases_data.at[cases_data.last_valid_index()-v_day-1,'d7_mean'] / v_max) * 70
+        x2 = 6 + (v_day * 5)
+        y2 = 1 + (cases_data.at[cases_data.last_valid_index()-v_day,'d7_mean'] / v_max) * 70
+        vdraw.line([x1,y1,x2,y2],fill=inky_display.RED,width=3,joint="curve") 
 else:
-    vdraw = ImageDraw.Draw(virus_bg)
     vdraw.text((5,25), "Netwk Error", inky_display.RED, font)
 
 img.paste(virus_bg,(inky_display.WIDTH-153,inky_display.HEIGHT-74))
