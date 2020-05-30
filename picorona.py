@@ -136,7 +136,7 @@ if web_success:
         v_max = 10
     else:
         v_max = d30_max
-    for v_day in 0..29:
+    for v_day in range(30):
         x1 = 1 + (v_day * 5)
         y1 = 1 + (cases_data.at[cases_data.last_valid_index()-v_day-1,'d7_mean'] / v_max) * 70
         x2 = 6 + (v_day * 5)
