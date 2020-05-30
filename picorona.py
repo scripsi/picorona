@@ -141,7 +141,7 @@ if web_success:
         y1 = 1 + (cases_data.at[cases_data.last_valid_index()-v_day-1,'d7_mean'] / v_max) * 70
         x2 = 6 + (v_day * 5)
         y2 = 1 + (cases_data.at[cases_data.last_valid_index()-v_day,'d7_mean'] / v_max) * 70
-        vdraw.line([x1,y1,x2,y2],fill=inky_display.RED,width=3,joint="curve") 
+        vdraw.line([x1,y1,x2,y2],fill=inky_display.RED,width=3) 
 else:
     vdraw.text((5,25), "Netwk Error", inky_display.RED, font)
 
