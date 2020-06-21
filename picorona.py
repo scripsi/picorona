@@ -88,6 +88,8 @@ else:
     )
     # recast date sample_day column to date format
     cases_data.loc[:,'sample_day'] = pd.to_datetime(cases_data.sample_day)
+    # sort data by date
+    cases_data.sort_values(by=['sample_day'], inplace=True)
     # recast cumulative_count column safely to numeric format, replace the NaNs with zero and then recast to int
     cases_data.cumulative_count = pd.to_numeric(cases_data.cumulative_count,errors='coerce')
     cases_data.loc[:,'cumulative_count'].fillna(0, inplace=True)
