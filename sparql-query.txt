@@ -1,0 +1,14 @@
+# SPARQL query for Lothian COVID confirmed cases data
+# http://statistics.gov.scot/data/coronavirus-covid-19-management-information/day/2020-05-28/S08000024/variable/testing-cumulative-people-tested-for-covid-19-positive/testing-cumulative-people-tested-for-covid-19-positive/count
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?periodname ?value
+WHERE {
+	?obs <http://purl.org/linked-data/cube#dataSet> <http://statistics.gov.scot/data/coronavirus-covid-19-management-information> .
+	?obs <http://purl.org/linked-data/sdmx/2009/dimension#refArea> <http://statistics.gov.scot/id/statistical-geography/S08000024> .
+    ?obs <http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure> <http://statistics.gov.scot/def/concept/measure-units/testing-cumulative-people-tested-for-covid-19-positive> .
+	?obs <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> ?perioduri .
+	?obs <http://statistics.gov.scot/def/measure-properties/count> ?value .
+	?perioduri rdfs:label ?periodname .
+}
