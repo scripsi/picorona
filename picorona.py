@@ -90,6 +90,8 @@ else:
     cases_data.loc[:,'sample_day'] = pd.to_datetime(cases_data.sample_day)
     # sort data by date
     cases_data.sort_values(by=['sample_day'], inplace=True)
+    # then fix the index
+    cases_data.reset_index(drop=True, inplace=True)
     # recast cumulative_count column safely to numeric format, replace the NaNs with zero and then recast to int
     cases_data.cumulative_count = pd.to_numeric(cases_data.cumulative_count,errors='coerce')
     cases_data.loc[:,'cumulative_count'].fillna(0, inplace=True)
@@ -134,14 +136,12 @@ if web_success:
         y = random.randint(0, 73)
         virus_bg.paste(virus_img,(x-10,y-10),virus_mask)
     # Draw trend line
-    if d30_max < 10:
-        v_max = 10
-    else:
-        v_max = d30_max
+    v_max = 10
     v_line = []
     for v_day in range(30):
-        v_line.append((3 + (v_day * 5), 2 + (cases_data.at[cases_data.last_valid_index()-v_day,'d7_mean'] / v_max) * 70))
-    
+        x = 3 + ((30-v_day) * 5)
+        y = 72 - (cases_data.at[cases_data.last_valid_index()-v_day,'d7_mean'] / v_max) * 70
+        v_line.append((x,y))
     vdraw.line(v_line,fill=inky_display.WHITE,width=7)
     vdraw.line(v_line,fill=inky_display.RED,width=3) 
 else:
