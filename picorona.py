@@ -149,7 +149,7 @@ else:
 
 img.paste(virus_bg,(inky_display.WIDTH-153,inky_display.HEIGHT-74))
 
-draw.text((10,57), str(new_cases), inky_display.WHITE, font)
+draw.text((10,45), str(new_cases), inky_display.WHITE, font)
 
 dw, dh = font.getsize(day_text)
 
