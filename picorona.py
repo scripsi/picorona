@@ -136,7 +136,7 @@ if web_success:
         y = random.randint(0, 73)
         virus_bg.paste(virus_img,(x-10,y-10),virus_mask)
     # Draw trend line
-    v_max = 10
+    v_max = 50
     v_line = []
     for v_day in range(30):
         x = 3 + ((30-v_day) * 5)
