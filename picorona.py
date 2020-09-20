@@ -120,7 +120,7 @@ else:
 
 img.paste(virus_bg,(inky_display.WIDTH-153,inky_display.HEIGHT-74))
 
-draw.text((10,35), cases_date.strftime("%d/%m/%Y"), inky_display.RED, littlefont)
+draw.text((10,35), cases_date.strftime("%d/%m"), inky_display.RED, littlefont)
 draw.text((10,45), str(new_cases), inky_display.WHITE, bigfont)
 
 dw, dh = bigfont.getsize(day_text)
