@@ -82,7 +82,7 @@ else:
     trend_cases_data['d7_mean'] = trend_cases_data.DailyPositive.rolling(window=7,min_periods=1).mean()
     # create a rolling 30day max
     trend_cases_data['d30_max'] = trend_cases_data.DailyPositive.rolling(window=30,min_periods=1).max()
-    d30_max = cases_data.at[cases_data.last_valid_index(),'d30_max']
+    d30_max = trend_cases_data.at[trend_cases_data.last_valid_index(),'d30_max']
     
     print(cases_number,"cases of Coronavirus in Lothian up to", cases_date.strftime("%A, %d %B %Y"))
     print(new_cases,"new cases since the previous day")
