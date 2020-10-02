@@ -81,7 +81,7 @@ else:
     # create a rolling 7day mean
     trend_cases_data['d7_mean'] = trend_cases_data.DailyPositive.rolling(window=7,min_periods=1).mean()
     # create a rolling 30day max
-    trend_cases_data['d30_max'] = trend_cases_data.DailyPositive.rolling(window=30,min_periods=1).max()
+    trend_cases_data['d30_max'] = trend_cases_data.d7_mean.rolling(window=30,min_periods=1).max()
     d30_max = trend_cases_data.at[trend_cases_data.last_valid_index(),'d30_max']
     
     print(cases_number,"cases of Coronavirus in Lothian up to", cases_date.strftime("%A, %d %B %Y"))
@@ -107,7 +107,7 @@ if web_success:
         y = random.randint(0, 73)
         virus_bg.paste(virus_img,(x-10,y-10),virus_mask)
     # Draw trend line
-    v_max = 100
+    v_max = d30_max
     v_line = []
     for v_day in range(30):
         x = 3 + ((30-v_day) * 5)
