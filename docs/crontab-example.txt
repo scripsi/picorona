@@ -1,0 +1,2 @@
+1 1 * * * /usr/bin/python3 /home/pi/picorona/picorona.py >/dev/null 2>&1
+15 14 * * * /usr/bin/python3 /home/pi/picorona/picorona.py >/dev/null 2>&1
